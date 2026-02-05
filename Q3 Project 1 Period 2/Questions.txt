@@ -1,3 +1,50 @@
 Questions:
 
 Write as many questions as you can based on the project specs.
+1. Can I change the characters denoting the areas of the maze? [C]
+
+2. What happens when Wolverine walks into a dead end? Do I move it back or is the attempt over? [O]
+
+3. Does the maze that contains the Buck also have a hallway? [C]
+
+4. If the answer to Q3 was yes, what do I do if Wolverine went through the hallway from the maze that contained the Buck? [O]
+
+5. Is which maze the Buck generate in random or do I manually set it? [C]
+
+6. How do I use stacks and queues? (I forgot how they work) [O]
+
+7. If the most optimal path can be found using stacks and queues can I use that instead? [C]
+
+8. How do I make sure that the path doesn't have a dead end? What do I do if Wolverine does get stuck? [O]
+
+9. What does "demonstrate your understanding of the algorithm by hand first mean?" Do I write out the code by hand? [O]
+
+10. Why is the stack-based approach higher-level than the Queue-based approach? [O]
+
+11. On the optimal path approach it said that the approach must be faster than the sum of the other two approaches. Does it not mean that by using either the stack or queue I can get faster than their sum? [O]
+
+12. What are some examples of "something completely different?" [O]
+
+13. What exactly is the "generous" time limit? [C]
+
+14. How many test cases are there? [C]
+
+15. Is it not allowed for me to include the "." in the second input format? Do I receive point deduction if I do put it? [O]
+
+16. Why does the maze "level" start with 0 and not 1? [O]
+
+17. Do I manually put the input or is it randomly generated? If it is generated how do I make certain that there is an actual way to reach the Buck or the hallway? [O]
+
+18. Why does the example 1 not include "." but example do does? [O]
+
+19. Since there are 3 things for each sole symbol in the coordinate system, do we have to use 3D-Arrays? [C]
+
+20. How to I use Scanner to read the input? (I forgot) [O]
+
+21. How do I determine whether it is impossible or not for Wolverine to reach the Buck? Does the program end after all the tiles have been traveled? If so, I feel that it is certain that Wolverine will go back steps. [O]
+
+22. How do I record the runtime for the program? (I forgot) [O]
+
+23. What are command line arguments? [O]
+
+24. What is autograder? [O]
