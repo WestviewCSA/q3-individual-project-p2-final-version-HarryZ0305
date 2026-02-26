@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Runner {
 
 	public static void main(String[] args) {
-		coordBasedInput("Coordinate for Hard 2");
+		mapBasedInput("Hard Map 2");
 
 	}
 	
@@ -56,9 +56,11 @@ public class Runner {
 			for(int z = 0; z < level; z++) {
 				for(int i = 0; i < row; i++) {
 					for(int j = 0; j < column; j++) {
-						System.out.println(map[z][i][j]);
+						System.out.print(map[z][i][j] + " ");
 					}
+					System.out.println();
 				}
+				System.out.println();
 			}
 			
 			//Testing the size
@@ -110,14 +112,15 @@ public class Runner {
 				}
 			}
 			
-			
 			//Testing by printing each value
 			for(int z = 0; z < level; z++) {
 				for(int i = 0; i < row; i++) {
 					for(int j = 0; j < column; j++) {
-						System.out.println(map[z][i][j]);
+						System.out.print(map[z][i][j] + " ");
 					}
+					System.out.println();
 				}
+				System.out.println();
 			}
 			
 			//Testing the size

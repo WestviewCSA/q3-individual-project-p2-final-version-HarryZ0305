@@ -1,0 +1,15 @@
+Week 1: Make sure I can push and commit changes to repository linked to GitHub classroom assignment. 
+        Create easy/medium/hard maps showing some understanding of the maps
+        Create easy/medium/hard coordinate-based maps showing understanding of the 2nd type of input files.
+        Be able to read in data from map files and store them in 3D arrays
+        Be able to store data from map files and store them in 3D arrays
+        Review the error
+Week 2: Start writing code that works with Queue-based approach
+        Start writing code that works with Stack-based approach
+Week 3: Finish the Queue-based and Stack-based approachs
+		Create the optimal approach
+		Create the Report Runtime section
+		Create errors and exceptions
+Week 4: Create the Command Line Arguments
+		Run tests to test the program
+		Finalize code for submission
