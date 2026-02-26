@@ -5,27 +5,44 @@ import java.util.Scanner;
 public class Runner {
 
 	public static void main(String[] args) {
-		mapBasedInput("Hard Map 2");
+		//mapBasedInput("Hard Map 2");
 
 	}
 	
-	public static void mapBasedInput(String mapName) {
+	public static void mapBasedInput(String mapName) throws Exception {
 		File map1 = new File(mapName);
+		Scanner map1Scan = null;
 		try {
-			Scanner map1Scan = new Scanner(map1);
+			map1Scan = new Scanner(map1);
 			
-			//The size of the 3D array
-			int row = Integer.parseInt(map1Scan.next());
-			int column = Integer.parseInt(map1Scan.next());
-			int level = Integer.parseInt(map1Scan.next());
+			//Checking and getting the dimensions of the map
+			if (!map1Scan.hasNextInt()) {
+                throw new IncorrectMapFormatException("File does not start with a number for the amount of rows");
+            }
+			int row = map1Scan.nextInt();
+			
+			if (!map1Scan.hasNextInt()) {
+                throw new IncorrectMapFormatException("File does not start with a number for the amount of columns");
+            }
+			int column = map1Scan.nextInt();
+			
+			if (!map1Scan.hasNextInt()) {
+                throw new IncorrectMapFormatException("File does not start with a number for the amount of levels");
+            }
+			int level = map1Scan.nextInt();
+			
+			//Skipping everything else on the first line
+			if (map1Scan.hasNextLine()) {
+				map1Scan.nextLine();
+			}
+			
+			if (row <= 0 || column <= 0 || level <= 0) {
+                throw new IncorrectMapFormatException("Map dimensions must be positive non-zero numbers.");
+            }
 			
 			//The 3D array
 			String[][][] map = new String[level][row][column];
 			
-			//Testing the size
-			System.out.print(row);
-			System.out.print(column);
-			System.out.println(level);
 			
 			//This loop is for each level
 			for(int j = 0; j < level; j++) {
@@ -51,23 +68,6 @@ public class Runner {
 					}
 				}
 			}
-			
-			//Testing by printing each value
-			for(int z = 0; z < level; z++) {
-				for(int i = 0; i < row; i++) {
-					for(int j = 0; j < column; j++) {
-						System.out.print(map[z][i][j] + " ");
-					}
-					System.out.println();
-				}
-				System.out.println();
-			}
-			
-			//Testing the size
-			System.out.println("Total # of values: "+ (map.length * map[0].length * map[0][0].length));
-			System.out.println("Check whether it is same as Level * Row * Column: " + (level * row * column));
-			
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -85,11 +85,6 @@ public class Runner {
 			
 			//The 3D array
 			String[][][] map = new String[level][row][column];
-			
-			//Testing the size
-			System.out.print(row);
-			System.out.print(column);
-			System.out.println(level);
 			
 			//Put the values into the array
 			while(map1Scan.hasNextLine()) {
@@ -111,28 +106,33 @@ public class Runner {
 					}
 				}
 			}
-			
-			//Testing by printing each value
-			for(int z = 0; z < level; z++) {
-				for(int i = 0; i < row; i++) {
-					for(int j = 0; j < column; j++) {
-						System.out.print(map[z][i][j] + " ");
-					}
-					System.out.println();
-				}
-				System.out.println();
-			}
-			
-			//Testing the size
-			System.out.println("Total # of values: "+ (map.length * map[0].length * map[0][0].length));
-			System.out.println("Check whether it is same as Level * Row * Column: " + (level * row * column));
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
+	static class IllegalCommandLineInputsException extends Exception {
+        public IllegalCommandLineInputsException(String message) { 
+        		super(message); 
+        	}
+    }
 
-	
+    static class IllegalMapCharacterException extends Exception {
+        public IllegalMapCharacterException(String message) { 
+        		super(message); 
+        	}
+    }
+
+    static class IncompleteMapException extends Exception {
+        public IncompleteMapException(String message) { 
+        		super(message); 
+        	}
+    }
+
+    static class IncorrectMapFormatException extends Exception {
+        public IncorrectMapFormatException(String message) { 
+        		super(message); 
+        	}
+    }
+		
 }
