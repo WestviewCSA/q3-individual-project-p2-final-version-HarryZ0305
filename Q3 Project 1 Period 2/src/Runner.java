@@ -6,7 +6,7 @@ public class Runner {
 
 	public static void main(String[] args) {
 		try {
-			mapBasedInput("Hard Map 1");
+			coordBasedInput("Coordinate for Hard 2");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,28 +107,61 @@ public class Runner {
 	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			if (map1Scan != null) {
+				map1Scan.close();
+			}
 		}
 	}
 	
-	public static void coordBasedInput(String mapName) {
+	public static void coordBasedInput(String mapName) throws Exception {
 		File map1 = new File(mapName);
+		Scanner map1Scan = null;
 		try {
-			Scanner map1Scan = new Scanner(map1);
+			map1Scan = new Scanner(map1);
 			
-			//The size of the 3D array
-			int row = Integer.parseInt(map1Scan.next());
-			int column = Integer.parseInt(map1Scan.next());
-			int level = Integer.parseInt(map1Scan.next());
+			//Check for three positive non-zero numbers
+			if (!map1Scan.hasNextInt()) {
+				throw new IncorrectMapFormatException("File does not start with a number for the amount of rows");
+			}
+			int row = map1Scan.nextInt();
+			
+			if (!map1Scan.hasNextInt()) {
+				throw new IncorrectMapFormatException("File does not start with a number for the amount of columns");
+			}
+			int column = map1Scan.nextInt();
+			
+			if (!map1Scan.hasNextInt()) {
+				throw new IncorrectMapFormatException("File does not start with a number for the amount of levels");
+			}
+			int level = map1Scan.nextInt();
+			
+			if (row <= 0 || column <= 0 || level <= 0) {
+				throw new IncorrectMapFormatException("Map dimensions must be positive non-zero numbers.");
+			}
 			
 			//The 3D array
 			String[][][] map = new String[level][row][column];
 			
 			//Put the values into the array
-			while(map1Scan.hasNextLine()) {
+			while(map1Scan.hasNext()) {
 				String symbol = map1Scan.next();
+				
+				//Check for illegal characters in the first column
+				if (!isValidChar(symbol.charAt(0)) || symbol.length() != 1) {
+					throw new IllegalMapCharacterException("The character '" + symbol + "' is an illegal character.");
+				}
+				
 				int rowWhere = Integer.parseInt(map1Scan.next());
 				int columnWhere = Integer.parseInt(map1Scan.next());
 				int levelWhere = Integer.parseInt(map1Scan.next());
+				
+				//Check for coordinates that don't fit inside the maze
+				if (rowWhere < 0 || rowWhere >= row || 
+					columnWhere < 0 || columnWhere >= column || 
+					levelWhere < 0 || levelWhere >= level) {
+					throw new IncorrectMapFormatException("Coordinates out of bounds: (" + rowWhere + ", " + columnWhere + ", " + levelWhere + ")");
+				}
 				
 				map[levelWhere][rowWhere][columnWhere] = symbol;
 			}
@@ -140,13 +173,22 @@ public class Runner {
 						if(map[z][i][j] == null) {
 							map[z][i][j] = ".";
 						}
+						System.out.print(map[z][i][j]);
 					}
+					System.out.println();
 				}
+				System.out.println();
 			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			if (map1Scan != null) {
+				map1Scan.close();
+			}
 		}
 	}
+
 	
 	static class IllegalCommandLineInputsException extends Exception {
         public IllegalCommandLineInputsException(String message) { 
