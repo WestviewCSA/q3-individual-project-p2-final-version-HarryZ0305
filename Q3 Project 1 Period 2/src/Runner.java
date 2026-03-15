@@ -98,7 +98,7 @@ public class Runner {
 			for(int z = 0; z < level; z++) {
 				for(int i = 0; i < row; i++) {
 					for(int j = 0; j < column; j++) {
-						System.out.print(map[z][i][j]);;
+						System.out.print(map[z][i][j]);
 					}
 					System.out.println();
 				}
@@ -149,7 +149,7 @@ public class Runner {
 				
 				//Check for illegal characters in the first column
 				if (!isValidChar(symbol.charAt(0)) || symbol.length() != 1) {
-					throw new IllegalMapCharacterException("The character '" + symbol + "' is an illegal character.");
+					throw new IllegalMapCharacterException("The character " + symbol + " is an illegal character.");
 				}
 				
 				int rowWhere = Integer.parseInt(map1Scan.next());
@@ -157,9 +157,7 @@ public class Runner {
 				int levelWhere = Integer.parseInt(map1Scan.next());
 				
 				//Check for coordinates that don't fit inside the maze
-				if (rowWhere < 0 || rowWhere >= row || 
-					columnWhere < 0 || columnWhere >= column || 
-					levelWhere < 0 || levelWhere >= level) {
+				if (rowWhere < 0 || rowWhere >= row || columnWhere < 0 || columnWhere >= column || levelWhere < 0 || levelWhere >= level) {
 					throw new IncorrectMapFormatException("Coordinates out of bounds: (" + rowWhere + ", " + columnWhere + ", " + levelWhere + ")");
 				}
 				
@@ -188,30 +186,4 @@ public class Runner {
 			}
 		}
 	}
-
-	
-	static class IllegalCommandLineInputsException extends Exception {
-        public IllegalCommandLineInputsException(String message) { 
-        		super(message); 
-        	}
-    }
-
-    static class IllegalMapCharacterException extends Exception {
-        public IllegalMapCharacterException(String message) { 
-        		super(message); 
-        	}
-    }
-
-    static class IncompleteMapException extends Exception {
-        public IncompleteMapException(String message) { 
-        		super(message); 
-        	}
-    }
-
-    static class IncorrectMapFormatException extends Exception {
-        public IncorrectMapFormatException(String message) { 
-        		super(message); 
-        	}
-    }
-		
 }
