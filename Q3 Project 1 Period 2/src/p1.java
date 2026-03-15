@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class p1 {
 
@@ -184,6 +186,41 @@ public class p1 {
 			if (map1Scan != null) {
 				map1Scan.close();
 			}
+		}
+	}
+	
+	public static void queueBasedSearch(String[][][] map) {
+		//The dimensions of the map
+		int levels = map.length;
+		int rows = map[0].length;
+		int columns = map[0][0].length;
+		
+		//The queue
+		Queue<Location> queue = new LinkedList<>();
+		
+		//3D array to store visited tiles, all start false by default
+		boolean[][][] visited = new boolean[levels][rows][columns];
+		
+		//The initial starting point
+		Location startW = null;
+		
+		for(int i = 0; i < levels; i++) {
+			for(int j = 0; i < rows; i++) {
+				for(int z = 0; i < columns; i++) {
+					if(map[i][j][z] == "W") {
+						startW = new Location(j, z, i, null); //Coord of start position
+						visited[i][j][z] = true; //Since dequeued it means visited, will not come back here
+						queue.add(startW); //Enqueue start position
+						break; //I think this would save time since only one W
+					}
+				}
+			}
+		}
+		
+		//Check if W actually exist
+		if(startW == null) {
+			System.out.println("The Wolverine Store is closed.");
+			return;
 		}
 	}
 }
