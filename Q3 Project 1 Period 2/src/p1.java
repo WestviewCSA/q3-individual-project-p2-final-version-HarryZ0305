@@ -7,11 +7,23 @@ import java.util.Queue;
 public class p1 {
 
 	public static void main(String[] args) {
-		try {
-			coordBasedInput("Coordinate for Hard 2");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    try {
+	        String[][][] map = coordBasedInput("Coordinate for Easy 2");
+	        queueBasedSearch(map);
+
+	        for(int z = 0; z < map.length; z++) {
+	        	System.out.println("Level " + z + ":");
+	        	for(int i = 0; i < map[z].length; i++) {
+	        		for(int j = 0; j < map[z][i].length; j++) {
+	        			System.out.print(map[z][i][j]);
+	                }
+	                System.out.println();
+	            }
+	         System.out.println();
+	         }   
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	//Checking if the characters are valid characters
@@ -20,7 +32,7 @@ public class p1 {
 		return validChars.indexOf(c) != -1;
 	}
 	
-	public static void mapBasedInput(String mapName) throws Exception {
+	public static String[][][] mapBasedInput(String mapName) throws Exception {
 		File map1 = new File(mapName);
 		Scanner map1Scan = null;
 		try {
@@ -95,19 +107,12 @@ public class p1 {
 			if(levelsProcessed < level) {
 				throw new IncompleteMapException("The map does not have enough lines");
 			}
-			
-			for(int z = 0; z < level; z++) {
-				for(int i = 0; i < row; i++) {
-					for(int j = 0; j < column; j++) {
-						System.out.print(map[z][i][j]);
-					}
-					System.out.println();
-				}
-				System.out.println();
-			}
+		
+			return map;
 	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			if (map1Scan != null) {
 				map1Scan.close();
@@ -115,7 +120,7 @@ public class p1 {
 		}
 	}
 	
-	public static void coordBasedInput(String mapName) throws Exception {
+	public static String[][][] coordBasedInput(String mapName) throws Exception {
 		File map1 = new File(mapName);
 		Scanner map1Scan = null;
 		try {
@@ -172,15 +177,15 @@ public class p1 {
 						if(map[z][i][j] == null) {
 							map[z][i][j] = ".";
 						}
-						System.out.print(map[z][i][j]);
 					}
-					System.out.println();
 				}
-				System.out.println();
 			}
+			
+			return map;
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			if (map1Scan != null) {
 				map1Scan.close();
