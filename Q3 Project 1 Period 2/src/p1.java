@@ -222,5 +222,51 @@ public class p1 {
 			System.out.println("The Wolverine Store is closed.");
 			return;
 		}
+		
+		while(!queue.isEmpty()) {
+			Location current = queue.remove(); //Dequeue next location
+			
+			int currentLevel = current.level;
+			int currentRow = current.row;
+			int currentColumn = current.column;
+			
+			//Check if it contains $
+			if(map[currentLevel][currentRow][currentColumn] == "$") {
+				return; //Do path marking later
+			}
+			//Check if it contains |
+			if(map[currentLevel][currentRow][currentColumn] == "|") {
+				return; //Do maze changing later
+			}
+			
+			//Add north, check for bounds, obstacle, and visited
+			if(current.row - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != "@" && !visited[currentLevel][currentRow - 1][currentColumn]) {
+				visited[currentLevel][currentRow - 1][currentColumn] = true; //set to visited
+				Location north = new Location(currentRow - 1, currentColumn, currentLevel, current); //create new location for the next step
+				queue.add(north); //enqueue the location
+			}
+			
+			//Add south
+			if(current.row + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != "@" && !visited[currentLevel][currentRow + 1][currentColumn]) {
+				visited[currentLevel][currentRow + 1][currentColumn] = true;
+				Location south = new Location(currentRow + 1, currentColumn, currentLevel, current);
+				queue.add(south);
+			}
+			
+			//Add east
+			if(current.column + 1 < columns && map[currentLevel][currentRow][currentColumn + 1] != "@" && !visited[currentLevel][currentRow][currentColumn + 1]) {
+				visited[currentLevel][currentRow][currentColumn + 1] = true;
+				Location east = new Location(currentRow, currentColumn + 1, currentLevel, current);
+				queue.add(east);
+			}
+			
+			//Add west
+			if(current.column - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != "@" && !visited[currentLevel][currentRow][currentColumn - 1]) {
+				visited[currentLevel][currentRow][currentColumn - 1] = true;
+				Location west = new Location(currentRow, currentColumn - 1, currentLevel, current);
+				queue.add(west);
+			}
+			
+		}
 	}
 }
