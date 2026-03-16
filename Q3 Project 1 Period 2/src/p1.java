@@ -198,27 +198,34 @@ public class p1 {
 		//The queue
 		Queue<Location> queue = new LinkedList<>();
 		
-		//3D array to store visited tiles, all start false by default
+		//3D array to store visited tiles, default false
 		boolean[][][] visited = new boolean[levels][rows][columns];
 		
-		//The initial starting point
+		//Array to store the row and column of the W for each level
+		int[][] levelSpawns = new int[levels][2];
 		Location startW = null;
 		
-		findStart:
+		//Find all W locations
 		for(int i = 0; i < levels; i++) {
 			for(int j = 0; j < rows; j++) {
 				for(int z = 0; z < columns; z++) {
 					if(map[i][j][z].equals("W")) {
-						startW = new Location(j, z, i, null); //Coord of start position
-						visited[i][j][z] = true; //Since dequeued it means visited, will not come back here
-						queue.add(startW); //Enqueue start position
-						break findStart; //I think this would save time since only one W
+						//Record the spawn coordinates for this specific level
+						levelSpawns[i][0] = j; //row
+						levelSpawns[i][1] = z; //column
+						
+						//Wolverine starting tile
+						if (i == 0) {
+							startW = new Location(j, z, i, null); 
+							visited[i][j][z] = true; 
+							queue.add(startW); 
+						}
 					}
 				}
 			}
 		}
 		
-		//Check if W actually exist
+		//Check if W exists on level 1
 		if(startW == null) {
 			System.out.println("The Wolverine Store is closed.");
 			return;
@@ -233,11 +240,28 @@ public class p1 {
 			
 			//Check if it contains $
 			if(map[currentLevel][currentRow][currentColumn].equals("$")) {
-				return; //Do path marking later
+				return; //Path marking
 			}
+			
 			//Check if it contains |
 			if(map[currentLevel][currentRow][currentColumn].equals("|")) {
-				return; //Do maze changing later
+				int nextLevel = currentLevel + 1;
+				
+				//Check if next level exists
+				if(nextLevel < levels) {
+					//Find the position of W in the new level
+					int spawnRow = levelSpawns[nextLevel][0];
+					int spawnColumn = levelSpawns[nextLevel][1];
+					
+					//Check if the tile has been visited
+					if (!visited[nextLevel][spawnRow][spawnColumn]) {
+						visited[nextLevel][spawnRow][spawnColumn] = true;
+						Location nextSpawn = new Location(spawnRow, spawnColumn, nextLevel, current);
+						queue.add(nextSpawn);
+					}
+				}
+				//Already finished this cycle
+				continue; 
 			}
 			
 			//Add north, check for bounds, obstacle, and visited
@@ -269,5 +293,8 @@ public class p1 {
 			}
 			
 		}
+		
+		// If the queue empties out and the loop finishes, the Buck is unreachable
+		System.out.println("The Wolverine Store is closed.");
 	}
 }
