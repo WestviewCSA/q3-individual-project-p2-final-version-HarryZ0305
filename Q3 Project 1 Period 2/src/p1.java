@@ -9,7 +9,7 @@ public class p1 {
 
 	public static void main(String[] args) {
 	    try {
-	        String[][][] map = mapBasedInput("Trap Map 1");
+	        String[][][] map = mapBasedInput("Trap Map 3");
 	        stackBasedSearch(map);
 
 	        for(int z = 0; z < map.length; z++) {
