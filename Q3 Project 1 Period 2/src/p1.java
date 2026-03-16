@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,8 +9,8 @@ public class p1 {
 
 	public static void main(String[] args) {
 	    try {
-	        String[][][] map = coordBasedInput("Coordinate for Easy 2");
-	        queueBasedSearch(map);
+	        String[][][] map = mapBasedInput("Trap Map 1");
+	        stackBasedSearch(map);
 
 	        for(int z = 0; z < map.length; z++) {
 	        	System.out.println("Level " + z + ":");
@@ -309,6 +310,124 @@ public class p1 {
 		}
 		
 		//If queue empties, $ is unreachable
+		System.out.println("The Wolverine Store is closed.");
+	}
+	
+	public static void stackBasedSearch(String[][][] map) {
+		//The dimensions of the map
+		int levels = map.length;
+		int rows = map[0].length;
+		int columns = map[0][0].length;
+		
+		//The stack
+		Stack<Location> stack = new Stack<>();
+		
+		//3D array to store visited tiles, default false
+		boolean[][][] visited = new boolean[levels][rows][columns];
+		
+		//Array to store the row and column of the W for each level
+		int[][] levelSpawns = new int[levels][2];
+		Location startW = null;
+		
+		//Find all W locations
+		for(int i = 0; i < levels; i++) {
+			for(int j = 0; j < rows; j++) {
+				for(int z = 0; z < columns; z++) {
+					if(map[i][j][z].equals("W")) {
+						//Record the spawn coordinates for this specific level
+						levelSpawns[i][0] = j; //row
+						levelSpawns[i][1] = z; //column
+						
+						//Wolverine starting tile
+						if (i == 0) {
+							startW = new Location(j, z, i, null); 
+							visited[i][j][z] = true; 
+							stack.push(startW); 
+						}
+					}
+				}
+			}
+		}
+		
+		//Check if W exists on level 1
+		if(startW == null) {
+			System.out.println("The Wolverine Store is closed.");
+			return;
+		}
+		
+		while(!stack.isEmpty()) {
+			Location current = stack.pop(); //Pop next location
+			
+			int currentLevel = current.level;
+			int currentRow = current.row;
+			int currentColumn = current.column;
+			
+			//Check if it contains $
+			if(map[currentLevel][currentRow][currentColumn].equals("$")) {
+							
+				//$ does not get replaced by +
+				Location trace = current.prev;
+							
+				//Since only the starting W has a prev of null, and we don't want the first W to be replaced by +, while loop is usable
+				while(trace.prev != null) {
+					//Swap "." for +
+					map[trace.level][trace.row][trace.column] = "+";
+					trace = trace.prev;
+				}
+
+				return; 
+			}
+			
+			//Check if it contains |
+			if(map[currentLevel][currentRow][currentColumn].equals("|")) {
+				int nextLevel = currentLevel + 1;
+				
+				//Check if next level exists
+				if(nextLevel < levels) {
+					//Find the position of W in the new level
+					int spawnRow = levelSpawns[nextLevel][0];
+					int spawnColumn = levelSpawns[nextLevel][1];
+					
+					//Check if the tile has been visited
+					if (!visited[nextLevel][spawnRow][spawnColumn]) {
+						visited[nextLevel][spawnRow][spawnColumn] = true;
+						Location nextSpawn = new Location(spawnRow, spawnColumn, nextLevel, current);
+						stack.push(nextSpawn);
+					}
+				}
+				//Already finished this cycle
+				continue; 
+			}
+			//Add west, check for bounds, obstacle, and visited
+			if(current.column - 1 >= 0 && !map[currentLevel][currentRow][currentColumn - 1].equals("@") && !visited[currentLevel][currentRow][currentColumn - 1]) {
+				visited[currentLevel][currentRow][currentColumn - 1] = true;
+				Location west = new Location(currentRow, currentColumn - 1, currentLevel, current);
+				stack.push(west);
+			}	
+			
+			//Add east
+			if(current.column + 1 < columns && !map[currentLevel][currentRow][currentColumn + 1].equals("@") && !visited[currentLevel][currentRow][currentColumn + 1]) {
+				visited[currentLevel][currentRow][currentColumn + 1] = true;
+				Location east = new Location(currentRow, currentColumn + 1, currentLevel, current);
+				stack.push(east);
+			}
+
+			//Add south
+			if(current.row + 1 < rows && !map[currentLevel][currentRow + 1][currentColumn].equals("@") && !visited[currentLevel][currentRow + 1][currentColumn]) {
+				visited[currentLevel][currentRow + 1][currentColumn] = true;
+				Location south = new Location(currentRow + 1, currentColumn, currentLevel, current);
+				stack.push(south);
+			}
+			
+			//Add north
+			if(current.row - 1 >= 0 && !map[currentLevel][currentRow - 1][currentColumn].equals("@") && !visited[currentLevel][currentRow - 1][currentColumn]) {
+				visited[currentLevel][currentRow - 1][currentColumn] = true; //set to visited
+				Location north = new Location(currentRow - 1, currentColumn, currentLevel, current); //create new location for the next step
+				stack.push(north); //enqueue the location
+			}
+		}
+		
+		//If stack empties, $ is unreachable
 		System.out.println("The Wolverine Store is closed.");
 	}
 }
