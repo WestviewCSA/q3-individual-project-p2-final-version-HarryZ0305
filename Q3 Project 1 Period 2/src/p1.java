@@ -92,36 +92,31 @@ public class p1 {
 	            queueBasedSearch(map);
 	        }
 	        else if(useOpt) {
-	            queueBasedSearch(map); //Will do optimal later
+	        	optimalSearch(map);
 	        }
 	        
 	        //Stop timer
 	        long timeEnd = System.nanoTime();
 
 	        //Output
-	        if(outCoord) {
-	            //Coordinate output
-	        	if(path.isEmpty()) {
-	                //The search method prints "The Wolverine Store is closed."
-	            }
-	            else {
-	                //Pop the stack to print the coordinates
-	                while (!path.isEmpty()) {
-	                    System.out.println(path.pop());
-	                }
+	        if(path.isEmpty()) {
+	            //The search methods already printed "The Wolverine Store is closed."
+	        }
+	        else if(outCoord) {
+	            //Pop the stack to print the coordinates
+	            while (!path.isEmpty()) {
+	                System.out.println(path.pop());
 	            }
 	        }
 	        else {
 	            //Map output
 	            for(int z = 0; z < map.length; z++) {
-	                System.out.println("Level " + z + ":");
 	                for(int i = 0; i < map[z].length; i++) {
 	                    for(int j = 0; j < map[z][i].length; j++) {
 	                        System.out.print(map[z][i][j]);
 	                    }
 	                    System.out.println();
 	                }
-	                System.out.println();
 	            }   
 	        }
 	        
@@ -565,8 +560,8 @@ public class p1 {
 		
 		//Variables to store $ location
 		int targetLevel = -1;
-		int targetRow;
-		int targetCol;
+		int targetRow = -1;
+		int targetCol = -1;
 		
 		//Find all W and the $
 		for(int i = 0; i < levels; i++) {
@@ -594,6 +589,74 @@ public class p1 {
 			System.out.println("The Wolverine Store is closed.");
 			return;
 		}
-        
+		//Create starting location's heuristic and add to queue
+		startW.setHeuristic(targetRow, targetCol, targetLevel);
+		visited[startW.level][startW.row][startW.column] = true; 
+		priorityQueue.add(startW);
+				
+		//Search loop
+		while(!priorityQueue.isEmpty()) {
+			Location current = priorityQueue.poll(); //poll() removes the tile with the LOWEST total cost
+					
+			int currentLevel = current.level;
+			int currentRow = current.row;
+			int currentColumn = current.column;
+					
+			// Check if it contains $
+			if(map[currentLevel][currentRow][currentColumn].equals("$")) {
+				Location trace = current.prev;
+				while(trace.prev != null) {
+					if (map[trace.level][trace.row][trace.column].equals(".")) {
+						map[trace.level][trace.row][trace.column] = "+";
+						path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
+					}
+					trace = trace.prev;
+				}
+				return;
+			}
+				
+			//Check for |
+			if(map[currentLevel][currentRow][currentColumn].equals("|")) {
+				int nextLevel = currentLevel + 1;
+				if(nextLevel < levels) {
+					int spawnRow = levelSpawns[nextLevel][0];
+					int spawnColumn = levelSpawns[nextLevel][1];
+							
+					if (!visited[nextLevel][spawnRow][spawnColumn]) {
+						visited[nextLevel][spawnRow][spawnColumn] = true;
+						Location nextSpawn = new Location(spawnRow, spawnColumn, nextLevel, current);
+								
+						//Calculate heuristic for the new  spawn
+						nextSpawn.setHeuristic(targetRow, targetCol, targetLevel);
+						priorityQueue.add(nextSpawn);
+					}
+				}
+				continue; 
+			}
+					
+			//Surrounding with dictionary to improve speed
+			int[][] directions = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+					
+			for (int[] dir : directions) {
+				int nRow = currentRow + dir[0];
+				int nCol = currentColumn + dir[1];
+						
+				//Check bounds, walls, and if visited
+				if (nRow >= 0 && nRow < rows && nCol >= 0 && nCol < columns) {
+					if (!map[currentLevel][nRow][nCol].equals("@") && !visited[currentLevel][nRow][nCol]) {
+						visited[currentLevel][nRow][nCol] = true;
+								
+						Location nextTile = new Location(nRow, nCol, currentLevel, current);
+								
+						//Calculate distance to $
+						nextTile.setHeuristic(targetRow, targetCol, targetLevel); 
+						priorityQueue.add(nextTile);
+					}
+				}
+			}
+		}
+				
+		//If there is no $
+		System.out.println("The Wolverine Store is closed.");
 	}
 }
