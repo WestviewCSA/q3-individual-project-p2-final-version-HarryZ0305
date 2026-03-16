@@ -251,9 +251,10 @@ public class p1 {
 							
 				//Since only the starting W has a prev of null, and we don't want the first W to be replaced by +, while loop is usable
 				while(trace.prev != null) {
-					//Swap "." for +
-					map[trace.level][trace.row][trace.column] = "+";
-					trace = trace.prev;
+				    if (map[trace.level][trace.row][trace.column].equals(".")) {
+				        map[trace.level][trace.row][trace.column] = "+";
+				    }
+				    trace = trace.prev;
 				}
 
 				return; 
@@ -370,9 +371,10 @@ public class p1 {
 							
 				//Since only the starting W has a prev of null, and we don't want the first W to be replaced by +, while loop is usable
 				while(trace.prev != null) {
-					//Swap "." for +
-					map[trace.level][trace.row][trace.column] = "+";
-					trace = trace.prev;
+				    if (map[trace.level][trace.row][trace.column].equals(".")) {
+				        map[trace.level][trace.row][trace.column] = "+";
+				    }
+				    trace = trace.prev;
 				}
 
 				return; 
