@@ -80,6 +80,9 @@ public class p1 {
 	            map = mapBasedInput(fileName);
 	        }
 
+	        //Start timer
+	        long timeStart = System.nanoTime();
+	        
 	        //Run the search based on the routing switch
 	        if(useStack) {
 	            stackBasedSearch(map);
@@ -90,6 +93,9 @@ public class p1 {
 	        else if(useOpt) {
 	            queueBasedSearch(map); //Will do optimal later
 	        }
+	        
+	        //Stop timer
+	        long timeEnd = System.nanoTime();
 
 	        //Output
 	        if(outCoord) {
@@ -116,6 +122,12 @@ public class p1 {
 	                }
 	                System.out.println();
 	            }   
+	        }
+	        
+	        //Print the runtime
+	        if(showTime) {
+	            double timeDuration = (timeEnd - timeStart) / 1000000000.0; //double in seconds
+	            System.out.println("Total Runtime: " + timeDuration + " seconds");
 	        }
 
 	    } catch (IllegalCommandLineInputsException e) {
