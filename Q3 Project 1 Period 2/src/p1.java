@@ -75,23 +75,36 @@ public class p1 {
 	        String[][][] map;
 	        if(inCoord) {
 	        	map = coordBasedInput(fileName);
-	        }else {
+	        }
+	        else {
 	            map = mapBasedInput(fileName);
 	        }
 
 	        //Run the search based on the routing switch
 	        if(useStack) {
 	            stackBasedSearch(map);
-	        }else if(useQueue) {
+	        }
+	        else if(useQueue) {
 	            queueBasedSearch(map);
-	        }else if(useOpt) {
+	        }
+	        else if(useOpt) {
 	            queueBasedSearch(map); //Will do optimal later
 	        }
 
 	        //Output
 	        if(outCoord) {
-	            //Coord output
-	        }else {
+	            //Coordinate output
+	        	if(path.isEmpty()) {
+	                //The search method prints "The Wolverine Store is closed."
+	            }
+	            else {
+	                //Pop the stack to print the coordinates
+	                while (!path.isEmpty()) {
+	                    System.out.println(path.pop());
+	                }
+	            }
+	        }
+	        else {
 	            //Map output
 	            for(int z = 0; z < map.length; z++) {
 	                System.out.println("Level " + z + ":");
