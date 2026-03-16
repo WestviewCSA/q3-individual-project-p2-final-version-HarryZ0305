@@ -12,7 +12,6 @@ public class p1 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	//Checking if the characters are valid characters
@@ -240,7 +239,18 @@ public class p1 {
 			
 			//Check if it contains $
 			if(map[currentLevel][currentRow][currentColumn].equals("$")) {
-				return; //Path marking
+							
+				//$ does not get replaced by +
+				Location trace = current.prev;
+							
+				//Since only the starting W has a prev of null, and we don't want the first W to be replaced by +, while loop is usable
+				while(trace.prev != null) {
+					//Swap "." for +
+					map[trace.level][trace.row][trace.column] = "+";
+					trace = trace.prev;
+				}
+
+				return; 
 			}
 			
 			//Check if it contains |
@@ -290,11 +300,10 @@ public class p1 {
 				visited[currentLevel][currentRow][currentColumn - 1] = true;
 				Location west = new Location(currentRow, currentColumn - 1, currentLevel, current);
 				queue.add(west);
-			}
-			
+			}	
 		}
 		
-		// If the queue empties out and the loop finishes, the Buck is unreachable
+		//If queue empties, $ is unreachable
 		System.out.println("The Wolverine Store is closed.");
 	}
 }
