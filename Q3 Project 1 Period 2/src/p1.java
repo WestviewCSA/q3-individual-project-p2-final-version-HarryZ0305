@@ -204,14 +204,15 @@ public class p1 {
 		//The initial starting point
 		Location startW = null;
 		
+		findStart:
 		for(int i = 0; i < levels; i++) {
-			for(int j = 0; i < rows; i++) {
-				for(int z = 0; i < columns; i++) {
-					if(map[i][j][z] == "W") {
+			for(int j = 0; j < rows; j++) {
+				for(int z = 0; z < columns; z++) {
+					if(map[i][j][z].equals("W")) {
 						startW = new Location(j, z, i, null); //Coord of start position
 						visited[i][j][z] = true; //Since dequeued it means visited, will not come back here
 						queue.add(startW); //Enqueue start position
-						break; //I think this would save time since only one W
+						break findStart; //I think this would save time since only one W
 					}
 				}
 			}
@@ -231,37 +232,37 @@ public class p1 {
 			int currentColumn = current.column;
 			
 			//Check if it contains $
-			if(map[currentLevel][currentRow][currentColumn] == "$") {
+			if(map[currentLevel][currentRow][currentColumn].equals("$")) {
 				return; //Do path marking later
 			}
 			//Check if it contains |
-			if(map[currentLevel][currentRow][currentColumn] == "|") {
+			if(map[currentLevel][currentRow][currentColumn].equals("|")) {
 				return; //Do maze changing later
 			}
 			
 			//Add north, check for bounds, obstacle, and visited
-			if(current.row - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != "@" && !visited[currentLevel][currentRow - 1][currentColumn]) {
+			if(current.row - 1 >= 0 && !map[currentLevel][currentRow - 1][currentColumn].equals("@") && !visited[currentLevel][currentRow - 1][currentColumn]) {
 				visited[currentLevel][currentRow - 1][currentColumn] = true; //set to visited
 				Location north = new Location(currentRow - 1, currentColumn, currentLevel, current); //create new location for the next step
 				queue.add(north); //enqueue the location
 			}
 			
 			//Add south
-			if(current.row + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != "@" && !visited[currentLevel][currentRow + 1][currentColumn]) {
+			if(current.row + 1 < rows && !map[currentLevel][currentRow + 1][currentColumn].equals("@") && !visited[currentLevel][currentRow + 1][currentColumn]) {
 				visited[currentLevel][currentRow + 1][currentColumn] = true;
 				Location south = new Location(currentRow + 1, currentColumn, currentLevel, current);
 				queue.add(south);
 			}
 			
 			//Add east
-			if(current.column + 1 < columns && map[currentLevel][currentRow][currentColumn + 1] != "@" && !visited[currentLevel][currentRow][currentColumn + 1]) {
+			if(current.column + 1 < columns && !map[currentLevel][currentRow][currentColumn + 1].equals("@") && !visited[currentLevel][currentRow][currentColumn + 1]) {
 				visited[currentLevel][currentRow][currentColumn + 1] = true;
 				Location east = new Location(currentRow, currentColumn + 1, currentLevel, current);
 				queue.add(east);
 			}
 			
 			//Add west
-			if(current.column - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != "@" && !visited[currentLevel][currentRow][currentColumn - 1]) {
+			if(current.column - 1 >= 0 && !map[currentLevel][currentRow][currentColumn - 1].equals("@") && !visited[currentLevel][currentRow][currentColumn - 1]) {
 				visited[currentLevel][currentRow][currentColumn - 1] = true;
 				Location west = new Location(currentRow, currentColumn - 1, currentLevel, current);
 				queue.add(west);
