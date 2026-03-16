@@ -8,20 +8,102 @@ import java.util.Queue;
 public class p1 {
 
 	public static void main(String[] args) {
-	    try {
-	        String[][][] map = mapBasedInput("Trap Map 3");
-	        stackBasedSearch(map);
+	    
+		//Command Line variables
+		boolean useStack = false;
+	    boolean useQueue = false;
+	    boolean useOpt = false;
+	    boolean inCoord = false;
+	    boolean outCoord = false;
+	    boolean showTime = false;
+	    int routingMethodsCount = 0; //Only 1 search type
+		
+		try {
+			//Check if arguments were provided
+	        if(args.length == 0) {
+	            throw new IllegalCommandLineInputsException("No arguments provided.");
+	        }
 
-	        for(int z = 0; z < map.length; z++) {
-	        	System.out.println("Level " + z + ":");
-	        	for(int i = 0; i < map[z].length; i++) {
-	        		for(int j = 0; j < map[z][i].length; j++) {
-	        			System.out.print(map[z][i][j]);
+	        //Loop through all arguments except file name
+	        for(int i = 0; i < args.length - 1; i++) {
+	            String arg = args[i];
+	            
+	            if(arg.equals("--Help")) {
+	                System.out.println("Switches:");
+	                System.out.println("--Stack, --Queue, --Opt : Choose ONE routing method.");
+	                System.out.println("--Incoordinate : Input is coordinate format.");
+	                System.out.println("--Outcoordinate : Output is coordinate format.");
+	                System.out.println("--Time : Print runtime.");
+	                System.exit(0);
+	            } 
+	            else if(arg.equals("--Stack")) { 
+	            	useStack = true; 
+	            	routingMethodsCount++; 
+	            }
+	            else if(arg.equals("--Queue")) { 
+	            	useQueue = true; 
+	            	routingMethodsCount++; 
+	            }
+	            else if(arg.equals("--Opt")) { 
+	            	useOpt = true; 
+	            	routingMethodsCount++; 
+	            }
+	            else if(arg.equals("--Incoordinate")) { 
+	            	inCoord = true; 
+	            }
+	            else if(arg.equals("--Outcoordinate")) { 
+	            	outCoord = true; 
+	            }
+	            else if(arg.equals("--Time")) { 
+	            	showTime = true; 
+	            }
+	        }
+	        
+	        //Check the amount of search switches
+	        if (routingMethodsCount != 1) {
+	            System.err.println("Error: You must specify exactly one of --Stack, --Queue, or --Opt.");
+	            throw new IllegalCommandLineInputsException("Invalid number of routing modes selected.");
+	        }
+			
+	        //File name is the last argument
+	        String fileName = args[args.length - 1];
+
+	        //Build map to either coord-based or map-based on input switch
+	        String[][][] map;
+	        if(inCoord) {
+	        	map = coordBasedInput(fileName);
+	        }else {
+	            map = mapBasedInput(fileName);
+	        }
+
+	        //Run the search based on the routing switch
+	        if(useStack) {
+	            stackBasedSearch(map);
+	        }else if(useQueue) {
+	            queueBasedSearch(map);
+	        }else if(useOpt) {
+	            queueBasedSearch(map); //Will do optimal later
+	        }
+
+	        //Output
+	        if(outCoord) {
+	            //Coord output
+	        }else {
+	            //Map output
+	            for(int z = 0; z < map.length; z++) {
+	                System.out.println("Level " + z + ":");
+	                for(int i = 0; i < map[z].length; i++) {
+	                    for(int j = 0; j < map[z][i].length; j++) {
+	                        System.out.print(map[z][i][j]);
+	                    }
+	                    System.out.println();
 	                }
 	                System.out.println();
-	            }
-	         System.out.println();
-	         }   
+	            }   
+	        }
+
+	    } catch (IllegalCommandLineInputsException e) {
+	        System.exit(-1);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
