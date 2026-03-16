@@ -7,6 +7,9 @@ import java.util.Queue;
 
 public class p1 {
 
+	//Store the coordinate path
+    public static Stack<String> path = new Stack<>();
+	
 	public static void main(String[] args) {
 	    
 		//Command Line variables
@@ -335,6 +338,9 @@ public class p1 {
 				while(trace.prev != null) {
 				    if (map[trace.level][trace.row][trace.column].equals(".")) {
 				        map[trace.level][trace.row][trace.column] = "+";
+				        
+				        //Push the coordinate to global stack
+				        path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
 				    }
 				    trace = trace.prev;
 				}
@@ -455,6 +461,9 @@ public class p1 {
 				while(trace.prev != null) {
 				    if (map[trace.level][trace.row][trace.column].equals(".")) {
 				        map[trace.level][trace.row][trace.column] = "+";
+				        
+				        //Push the coordinate to global stack
+				        path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
 				    }
 				    trace = trace.prev;
 				}
