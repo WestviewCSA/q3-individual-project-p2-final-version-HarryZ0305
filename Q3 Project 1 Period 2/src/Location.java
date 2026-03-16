@@ -38,7 +38,7 @@ public class Location implements Comparable<Location> {
 		return this.distance + this.heuristic;
 	}
 
-	//Tells the PriorityQueue how to sort the locations (lowest cost first)
+	//Tells the PriorityQueue to sort by lowest cost first
 	@Override
 	public int compareTo(Location other) {
 		return Integer.compare(this.getTotalCost(), other.getTotalCost());

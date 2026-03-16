@@ -549,4 +549,51 @@ public class p1 {
 		//If stack empties, $ is unreachable
 		System.out.println("The Wolverine Store is closed.");
 	}
+	
+	public static void optimalSearch(String[][][] map) {
+		//The dimensions of the map
+		int levels = map.length;
+		int rows = map[0].length;
+		int columns = map[0][0].length;
+		
+		//The priority queue 
+		PriorityQueue<Location> priorityQueue = new PriorityQueue<>();
+		boolean[][][] visited = new boolean[levels][rows][columns];
+		
+		int[][] levelSpawns = new int[levels][2];
+		Location startW = null;
+		
+		//Variables to store $ location
+		int targetLevel = -1;
+		int targetRow;
+		int targetCol;
+		
+		//Find all W and the $
+		for(int i = 0; i < levels; i++) {
+			for(int j = 0; j < rows; j++) {
+				for(int z = 0; z < columns; z++) {
+					if(map[i][j][z].equals("W")) {
+						levelSpawns[i][0] = j; 
+						levelSpawns[i][1] = z; 
+						if (i == 0) {
+							startW = new Location(j, z, i, null); 
+						}
+					} 
+					//Find $
+					else if (map[i][j][z].equals("$")) {
+						targetLevel = i;
+						targetRow = j;
+						targetCol = z;
+					}
+				}
+			}
+		}
+		
+		//Check if W or $ is missing
+		if(startW == null || targetLevel == -1) {
+			System.out.println("The Wolverine Store is closed.");
+			return;
+		}
+        
+	}
 }
