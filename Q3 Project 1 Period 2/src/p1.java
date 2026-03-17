@@ -561,6 +561,7 @@ public class p1 {
 		boolean[][][] visited = new boolean[levels][rows][columns];
 		
 		int[][] levelSpawns = new int[levels][2];
+		int[][] walkways = new int[levels][2];
 		Location startW = null;
 		
 		//Variables to store $ location
@@ -585,6 +586,11 @@ public class p1 {
 						targetRow = j;
 						targetCol = z;
 					}
+					//Find |
+					else if (map[i][j][z].equals("|")) {
+		                walkways[i][0] = j;
+		                walkways[i][1] = z;
+		            }
 				}
 			}
 		}
@@ -595,7 +601,7 @@ public class p1 {
 			return;
 		}
 		//Create starting location's heuristic and add to queue
-		startW.setHeuristic(targetRow, targetCol, targetLevel);
+		startW.setHeuristic(targetRow, targetCol, targetLevel, walkways);
 		visited[startW.level][startW.row][startW.column] = true; 
 		priorityQueue.add(startW);
 				
@@ -632,9 +638,9 @@ public class p1 {
 					if (!visited[nextLevel][spawnRow][spawnColumn]) {
 						visited[nextLevel][spawnRow][spawnColumn] = true;
 						Location nextSpawn = new Location(spawnRow, spawnColumn, nextLevel, current);
-								
-						//Calculate heuristic for the new  spawn
-						nextSpawn.setHeuristic(targetRow, targetCol, targetLevel);
+						
+						//Calculate heuristic for the new spawn
+						nextSpawn.setHeuristic(targetRow, targetCol, targetLevel, walkways);
 						priorityQueue.add(nextSpawn);
 					}
 				}
@@ -654,9 +660,9 @@ public class p1 {
 						visited[currentLevel][nRow][nCol] = true;
 								
 						Location nextTile = new Location(nRow, nCol, currentLevel, current);
-								
+						
 						//Calculate distance to $
-						nextTile.setHeuristic(targetRow, targetCol, targetLevel); 
+						nextTile.setHeuristic(targetRow, targetCol, targetLevel, walkways);
 						priorityQueue.add(nextTile);
 					}
 				}

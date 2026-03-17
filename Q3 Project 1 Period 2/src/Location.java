@@ -24,13 +24,25 @@ public class Location implements Comparable<Location> {
 		}
 	}
 	
-	//Calculates "Manhattan Distance" to the Buck
-	public void setHeuristic(int targetRow, int targetCol, int targetLevel) {
-		int rowDiff = Math.abs(this.row - targetRow);
-		int colDiff = Math.abs(this.column - targetCol);
-		int levelDiff = Math.abs(this.level - targetLevel);
-		
-		this.heuristic = rowDiff + colDiff + levelDiff;
+	//Calculates an "Admissible Heuristic" for A* Search using walkways
+	public void setHeuristic(int targetRow, int targetCol, int targetLevel, int[][] walkways) {
+		if (this.level == targetLevel) {
+			//On the final floor: Manhattan distance to the $
+			int rowDiff = Math.abs(this.row - targetRow);
+			int colDiff = Math.abs(this.column - targetCol);
+			this.heuristic = rowDiff + colDiff;
+		} else {
+			//On a different floor: Manhattan distance to the stairs (|) on THIS floor
+			int stairRow = walkways[this.level][0];
+			int stairCol = walkways[this.level][1];
+			
+			int distToStairs = Math.abs(this.row - stairRow) + Math.abs(this.column - stairCol);
+			
+			//Plus the cost of dropping down the remaining levels
+			int levelDiff = Math.abs(this.level - targetLevel);
+			
+			this.heuristic = distToStairs + levelDiff;
+		}
 	}
 
 	//Calculates the f-cost
