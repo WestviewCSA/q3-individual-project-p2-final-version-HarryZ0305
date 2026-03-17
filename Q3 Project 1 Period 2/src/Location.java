@@ -16,11 +16,11 @@ public class Location implements Comparable<Location> {
 		this.prev = previous;
 		
 		//Calculate distance based on the previous tile
-		if (previous == null) {
+		if (prev == null) {
 			this.distance = 0;
 		} 
 		else {
-			this.distance = previous.distance + 1;
+			this.distance = prev.distance + 1;
 		}
 	}
 	
@@ -41,6 +41,8 @@ public class Location implements Comparable<Location> {
 	//Tells the PriorityQueue to sort by lowest cost first
 	@Override
 	public int compareTo(Location other) {
-		return Integer.compare(this.getTotalCost(), other.getTotalCost());
+	    int myTotalCost = this.distance + this.heuristic;
+	    int otherTotalCost = other.distance + other.heuristic;
+	    return Integer.compare(myTotalCost, otherTotalCost);
 	}
 }

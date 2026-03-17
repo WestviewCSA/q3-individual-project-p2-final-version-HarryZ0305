@@ -10,6 +10,8 @@ public class p1 {
 
 	//Store the coordinate path
     public static Stack<String> path = new Stack<>();
+    //Whether there is a solution
+    public static boolean solutionFound = false;
 	
 	public static void main(String[] args) {
 	    
@@ -32,7 +34,7 @@ public class p1 {
 	        for(int i = 0; i < args.length - 1; i++) {
 	            String arg = args[i];
 	            
-	            if(arg.equals("--Help")) {
+	            if(arg.equalsIgnoreCase("--Help")) {
 	                System.out.println("Switches:");
 	                System.out.println("--Stack, --Queue, --Opt : Choose ONE routing method.");
 	                System.out.println("--Incoordinate : Input is coordinate format.");
@@ -40,25 +42,25 @@ public class p1 {
 	                System.out.println("--Time : Print runtime.");
 	                System.exit(0);
 	            } 
-	            else if(arg.equals("--Stack")) { 
+	            else if(arg.equalsIgnoreCase("--Stack")) { 
 	            	useStack = true; 
 	            	routingMethodsCount++; 
 	            }
-	            else if(arg.equals("--Queue")) { 
+	            else if(arg.equalsIgnoreCase("--Queue")) { 
 	            	useQueue = true; 
 	            	routingMethodsCount++; 
 	            }
-	            else if(arg.equals("--Opt")) { 
+	            else if(arg.equalsIgnoreCase("--Opt")) { 
 	            	useOpt = true; 
 	            	routingMethodsCount++; 
 	            }
-	            else if(arg.equals("--Incoordinate")) { 
+	            else if(arg.equalsIgnoreCase("--Incoordinate")) { 
 	            	inCoord = true; 
 	            }
-	            else if(arg.equals("--Outcoordinate")) { 
+	            else if(arg.equalsIgnoreCase("--Outcoordinate")) { 
 	            	outCoord = true; 
 	            }
-	            else if(arg.equals("--Time")) { 
+	            else if(arg.equalsIgnoreCase("--Time")) { 
 	            	showTime = true; 
 	            }
 	        }
@@ -99,7 +101,7 @@ public class p1 {
 	        long timeEnd = System.nanoTime();
 
 	        //Output
-	        if(path.isEmpty()) {
+	        if(!solutionFound) {
 	            //The search methods already printed "The Wolverine Store is closed."
 	        }
 	        else if(outCoord) {
@@ -127,7 +129,8 @@ public class p1 {
 	        }
 
 	    } catch (IllegalCommandLineInputsException e) {
-	        System.exit(-1);
+	    	System.err.println(e.getMessage());
+	    	System.exit(-1);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -365,7 +368,8 @@ public class p1 {
 				    }
 				    trace = trace.prev;
 				}
-
+				
+				solutionFound = true;
 				return; 
 			}
 			
@@ -489,6 +493,7 @@ public class p1 {
 				    trace = trace.prev;
 				}
 
+				solutionFound = true;
 				return; 
 			}
 			
@@ -612,6 +617,8 @@ public class p1 {
 					}
 					trace = trace.prev;
 				}
+				
+				solutionFound = true;
 				return;
 			}
 				
