@@ -28,7 +28,7 @@ public class Location implements Comparable<Location> {
 	public void setHeuristic(int targetRow, int targetCol, int targetLevel) {
 		int rowDiff = Math.abs(this.row - targetRow);
 		int colDiff = Math.abs(this.column - targetCol);
-		int levelDiff = Math.abs(this.level - targetLevel) * 100; //More important if on a different level
+		int levelDiff = Math.abs(this.level - targetLevel);
 		
 		this.heuristic = rowDiff + colDiff + levelDiff;
 	}
