@@ -273,7 +273,7 @@ public class p1 {
             
             //Only push the coordinate if the tile is an empty space '.'
             if (map[trace.level][trace.row][trace.column] == '.') {
-                path.push("+" + trace.row + " " + trace.column + " " + trace.level);
+                path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
                 map[trace.level][trace.row][trace.column] = '+';
             }
             
