@@ -57,6 +57,8 @@ public class p1 {
                     outCoord = true;
                 } else if (arg.equalsIgnoreCase("--Time")) {
                     showTime = true;
+                } else if (arg.equalsIgnoreCase("--EC")) {
+                    //I did not do EC
                 }
             }
 
@@ -262,14 +264,17 @@ public class p1 {
         }
     }
 
-    //Helper method to extract the traceback logic
+  //Helper method to extract the traceback logic
     private static void buildPath(Location current, char[][][] map) {
         Location trace = current;
         while (trace.prev != null) {
-            path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
+            
+            //Only push the coordinate if the tile is an empty space '.'
             if (map[trace.level][trace.row][trace.column] == '.') {
+                path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
                 map[trace.level][trace.row][trace.column] = '+';
             }
+            
             trace = trace.prev;
         }
         solutionFound = true;
