@@ -203,13 +203,25 @@ public class p1 {
             char[][][] map = new char[level][row][column];
 
             while (map1Scan.hasNext()) {
-                String symbol = map1Scan.next();
+            	String symbol = map1Scan.next();
                 if (!isValidChar(symbol.charAt(0)) || symbol.length() != 1) {
                     throw new IllegalMapCharacterException("The character " + symbol + " is an illegal character.");
                 }
 
+                //Check for unexpected end of file before reading each coordinate
+                if (!map1Scan.hasNext()) {
+                    throw new IncompleteMapException("Coordinate map file ended prematurely: missing row.");
+                }
                 int rowWhere = Integer.parseInt(map1Scan.next());
+
+                if (!map1Scan.hasNext()) {
+                    throw new IncompleteMapException("Coordinate map file ended prematurely: missing column.");
+                }
                 int columnWhere = Integer.parseInt(map1Scan.next());
+
+                if (!map1Scan.hasNext()) {
+                    throw new IncompleteMapException("Coordinate map file ended prematurely: missing level.");
+                }
                 int levelWhere = Integer.parseInt(map1Scan.next());
 
                 if (rowWhere < 0 || rowWhere >= row || columnWhere < 0 || columnWhere >= column || levelWhere < 0 || levelWhere >= level) {
@@ -480,6 +492,10 @@ public class p1 {
         while (!priorityQueue.isEmpty()) {
             Location current = priorityQueue.poll();
 
+            if (current.distance > costToReach[current.level][current.row][current.column]) {
+                continue; //Skip stale node
+            }
+            
             int currentLevel = current.level;
             int currentRow = current.row;
             int currentColumn = current.column;
