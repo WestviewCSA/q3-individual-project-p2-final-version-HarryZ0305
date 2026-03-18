@@ -55,6 +55,12 @@ public class Location implements Comparable<Location> {
 	public int compareTo(Location other) {
 	    int myTotalCost = this.distance + this.heuristic;
 	    int otherTotalCost = other.distance + other.heuristic;
+	    
+	    //If the total costs are tied, choose the one closer to the goal
+	    if (myTotalCost == otherTotalCost) {
+	        return Integer.compare(this.heuristic, other.heuristic);
+	    }
+	    
 	    return Integer.compare(myTotalCost, otherTotalCost);
 	}
 }

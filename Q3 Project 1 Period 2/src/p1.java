@@ -27,18 +27,22 @@ public class p1 {
             if (args.length == 0) {
                 throw new IllegalCommandLineInputsException("No arguments provided.");
             }
-
-            for (int i = 0; i < args.length - 1; i++) {
-                String arg = args[i];
-
+            
+            for (String arg : args) {
                 if (arg.equalsIgnoreCase("--Help")) {
-                    System.out.println("Switches:");
+                	System.out.println("Switches:");
                     System.out.println("--Stack, --Queue, --Opt : Choose ONE routing method.");
                     System.out.println("--Incoordinate : Input is coordinate format.");
                     System.out.println("--Outcoordinate : Output is coordinate format.");
                     System.out.println("--Time : Print runtime.");
                     System.exit(0);
-                } else if (arg.equalsIgnoreCase("--Stack")) {
+                }
+            }
+            
+            for (int i = 0; i < args.length - 1; i++) {
+                String arg = args[i];
+
+                if (arg.equalsIgnoreCase("--Stack")) {
                     useStack = true;
                     routingMethodsCount++;
                 } else if (arg.equalsIgnoreCase("--Queue")) {
@@ -106,6 +110,9 @@ public class p1 {
             }
 
         } catch (IllegalCommandLineInputsException e) {
+            System.err.println(e.getMessage());
+            System.exit(-1);
+        } catch (IllegalMapCharacterException | IncompleteMapException | IncorrectMapFormatException e) {
             System.err.println(e.getMessage());
             System.exit(-1);
         } catch (Exception e) {
@@ -313,8 +320,10 @@ public class p1 {
                     Location nextSpawn = findWOnLevel(map, nextLevel);
                     if (nextSpawn != null && !visited[nextLevel][nextSpawn.row][nextSpawn.column]) {
                         visited[nextLevel][nextSpawn.row][nextSpawn.column] = true;
-                        nextSpawn.prev = current; 
-                        queue.add(nextSpawn);
+                        
+                        //Create a new location so the constructor calculates the distance
+                        Location actualNextSpawn = new Location(nextSpawn.row, nextSpawn.column, nextLevel, current);
+                        queue.add(actualNextSpawn);
                     }
                 }
                 continue;
@@ -323,7 +332,8 @@ public class p1 {
             //North
             if (currentRow - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != '@' && !visited[currentLevel][currentRow - 1][currentColumn]) {
                 if (map[currentLevel][currentRow - 1][currentColumn] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow - 1][currentColumn] = true;
                 queue.add(new Location(currentRow - 1, currentColumn, currentLevel, current));
@@ -332,7 +342,8 @@ public class p1 {
             //South
             if (currentRow + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != '@' && !visited[currentLevel][currentRow + 1][currentColumn]) {
                 if (map[currentLevel][currentRow + 1][currentColumn] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow + 1][currentColumn] = true;
                 queue.add(new Location(currentRow + 1, currentColumn, currentLevel, current));
@@ -341,7 +352,8 @@ public class p1 {
             //East
             if (currentColumn + 1 < columns && map[currentLevel][currentRow][currentColumn + 1] != '@' && !visited[currentLevel][currentRow][currentColumn + 1]) {
                 if (map[currentLevel][currentRow][currentColumn + 1] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow][currentColumn + 1] = true;
                 queue.add(new Location(currentRow, currentColumn + 1, currentLevel, current));
@@ -350,7 +362,8 @@ public class p1 {
             //West
             if (currentColumn - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != '@' && !visited[currentLevel][currentRow][currentColumn - 1]) {
                 if (map[currentLevel][currentRow][currentColumn - 1] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow][currentColumn - 1] = true;
                 queue.add(new Location(currentRow, currentColumn - 1, currentLevel, current));
@@ -391,8 +404,10 @@ public class p1 {
                     Location nextSpawn = findWOnLevel(map, nextLevel);
                     if (nextSpawn != null && !visited[nextLevel][nextSpawn.row][nextSpawn.column]) {
                         visited[nextLevel][nextSpawn.row][nextSpawn.column] = true;
-                        nextSpawn.prev = current;
-                        stack.push(nextSpawn);
+                        
+                        // Create a new location so the constructor calculates the distance
+                        Location actualNextSpawn = new Location(nextSpawn.row, nextSpawn.column, nextLevel, current);
+                        stack.push(actualNextSpawn);
                     }
                 }
                 continue;
@@ -401,7 +416,8 @@ public class p1 {
             //West
             if (currentColumn - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != '@' && !visited[currentLevel][currentRow][currentColumn - 1]) {
                 if (map[currentLevel][currentRow][currentColumn - 1] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow][currentColumn - 1] = true;
                 stack.push(new Location(currentRow, currentColumn - 1, currentLevel, current));
@@ -410,7 +426,8 @@ public class p1 {
             //East
             if (currentColumn + 1 < columns && map[currentLevel][currentRow][currentColumn + 1] != '@' && !visited[currentLevel][currentRow][currentColumn + 1]) {
                 if (map[currentLevel][currentRow][currentColumn + 1] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow][currentColumn + 1] = true;
                 stack.push(new Location(currentRow, currentColumn + 1, currentLevel, current));
@@ -419,7 +436,8 @@ public class p1 {
             //South
             if (currentRow + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != '@' && !visited[currentLevel][currentRow + 1][currentColumn]) {
                 if (map[currentLevel][currentRow + 1][currentColumn] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow + 1][currentColumn] = true;
                 stack.push(new Location(currentRow + 1, currentColumn, currentLevel, current));
@@ -428,7 +446,8 @@ public class p1 {
             //North
             if (currentRow - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != '@' && !visited[currentLevel][currentRow - 1][currentColumn]) {
                 if (map[currentLevel][currentRow - 1][currentColumn] == '$') {
-                    buildPath(current, map); return;
+                    buildPath(current, map); 
+                    return;
                 }
                 visited[currentLevel][currentRow - 1][currentColumn] = true;
                 stack.push(new Location(currentRow - 1, currentColumn, currentLevel, current));
@@ -501,16 +520,9 @@ public class p1 {
             int currentColumn = current.column;
 
             //Wait to check for $ until after popped
+          //Wait to check for $ until after popped
             if (map[currentLevel][currentRow][currentColumn] == '$') {
-                Location trace = current.prev;
-                while (trace.prev != null) {
-                    path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
-                    if (map[trace.level][trace.row][trace.column] == '.') {
-                        map[trace.level][trace.row][trace.column] = '+';
-                    }
-                    trace = trace.prev;
-                }
-                solutionFound = true;
+                buildPath(current.prev, map); 
                 return;
             }
 
