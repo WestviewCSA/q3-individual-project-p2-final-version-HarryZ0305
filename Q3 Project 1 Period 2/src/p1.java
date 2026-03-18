@@ -432,7 +432,6 @@ public class p1 {
         int columns = map[0][0].length;
 
         PriorityQueue<Location> priorityQueue = new PriorityQueue<>();
-        boolean[][][] visited = new boolean[levels][rows][columns];
 
         int[][] walkways = new int[levels][2];
         Location startW = null;
@@ -465,10 +464,17 @@ public class p1 {
             System.out.println("The Wolverine Store is closed.");
             return;
         }
+        
+        int[][][] costToReach = new int[levels][rows][columns];
+        for(int i=0; i<levels; i++)
+            for(int j=0; j<rows; j++)
+                for(int k=0; k<columns; k++)
+                    costToReach[i][j][k] = Integer.MAX_VALUE;
+
+        costToReach[startW.level][startW.row][startW.column] = 0;
 
         //Initialize heuristics for starting position
         startW.setHeuristic(targetRow, targetCol, targetLevel, walkways);
-        visited[startW.level][startW.row][startW.column] = true;
         priorityQueue.add(startW);
 
         while (!priorityQueue.isEmpty()) {
@@ -497,11 +503,17 @@ public class p1 {
                 if (nextLevel < levels) {
                     Location nextSpawn = findWOnLevel(map, nextLevel);
                     
-                    if (nextSpawn != null && !visited[nextLevel][nextSpawn.row][nextSpawn.column]) {
-                        visited[nextLevel][nextSpawn.row][nextSpawn.column] = true;
-                        nextSpawn.prev = current;
-                        nextSpawn.setHeuristic(targetRow, targetCol, targetLevel, walkways);
-                        priorityQueue.add(nextSpawn);
+                    int tentativeDistance = current.distance + 1;
+
+                    if (nextSpawn != null && tentativeDistance < costToReach[nextLevel][nextSpawn.row][nextSpawn.column]) {
+                        
+                        costToReach[nextLevel][nextSpawn.row][nextSpawn.column] = tentativeDistance;
+                        
+                        //Create a new Location so the constructor calculates the distance
+                        Location actualNextSpawn = new Location(nextSpawn.row, nextSpawn.column, nextLevel, current);
+                        
+                        actualNextSpawn.setHeuristic(targetRow, targetCol, targetLevel, walkways);
+                        priorityQueue.add(actualNextSpawn);
                     }
                 }
                 continue;
@@ -514,15 +526,18 @@ public class p1 {
                 int nCol = currentColumn + dir[1];
 
                 if (nRow >= 0 && nRow < rows && nCol >= 0 && nCol < columns) {
-                    if (map[currentLevel][nRow][nCol] != '@' && !visited[currentLevel][nRow][nCol]) {
-                        
-                        visited[currentLevel][nRow][nCol] = true;
-                        Location nextTile = new Location(nRow, nCol, currentLevel, current);
-                        
-                        //Calculate heuristics before adding to PQ
-                        nextTile.setHeuristic(targetRow, targetCol, targetLevel, walkways);
-                        priorityQueue.add(nextTile);
-                    }
+                	int tentativeDistance = current.distance + 1;
+
+                	//Check if it's not a wall and if this new path is faster than any previous path
+                	if (map[currentLevel][nRow][nCol] != '@' && tentativeDistance < costToReach[currentLevel][nRow][nCol]) {
+                	    
+                	    //Update the record for the fastest path
+                	    costToReach[currentLevel][nRow][nCol] = tentativeDistance;
+                	    
+                	    Location nextTile = new Location(nRow, nCol, currentLevel, current);
+                	    nextTile.setHeuristic(targetRow, targetCol, targetLevel, walkways);
+                	    priorityQueue.add(nextTile);
+                	}
                 }
             }
         }
