@@ -108,7 +108,7 @@ public class p1 {
 
             if (showTime) {
                 double timeDuration = (timeEnd - timeStart) / 1000000000.0;
-                System.out.println("Total Runtime: " + timeDuration + " seconds");
+                System.out.printf("Total Runtime: %.6f seconds\n", timeDuration);
             }
 
         } catch (IllegalCommandLineInputsException e) {
