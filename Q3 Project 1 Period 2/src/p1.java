@@ -273,7 +273,7 @@ public class p1 {
             
             //Only push the coordinate if the tile is an empty space '.'
             if (map[trace.level][trace.row][trace.column] == '.') {
-                path.push("+" + trace.row + " " + trace.column + " " + trace.level);
+                path.push("+ " + trace.row + " " + trace.column + " " + trace.level);
                 map[trace.level][trace.row][trace.column] = '+';
             }
             
@@ -419,15 +419,25 @@ public class p1 {
                 }
                 continue;
             }
-
-            //West
-            if (currentColumn - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != '@' && !visited[currentLevel][currentRow][currentColumn - 1]) {
-                if (map[currentLevel][currentRow][currentColumn - 1] == '$') {
+            
+            //North
+            if (currentRow - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != '@' && !visited[currentLevel][currentRow - 1][currentColumn]) {
+                if (map[currentLevel][currentRow - 1][currentColumn] == '$') {
                     buildPath(current, map); 
                     return;
                 }
-                visited[currentLevel][currentRow][currentColumn - 1] = true;
-                stack.push(new Location(currentRow, currentColumn - 1, currentLevel, current));
+                visited[currentLevel][currentRow - 1][currentColumn] = true;
+                stack.push(new Location(currentRow - 1, currentColumn, currentLevel, current));
+            }
+            
+            //South
+            if (currentRow + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != '@' && !visited[currentLevel][currentRow + 1][currentColumn]) {
+                if (map[currentLevel][currentRow + 1][currentColumn] == '$') {
+                    buildPath(current, map); 
+                    return;
+                }
+                visited[currentLevel][currentRow + 1][currentColumn] = true;
+                stack.push(new Location(currentRow + 1, currentColumn, currentLevel, current));
             }
 
             //East
@@ -439,26 +449,17 @@ public class p1 {
                 visited[currentLevel][currentRow][currentColumn + 1] = true;
                 stack.push(new Location(currentRow, currentColumn + 1, currentLevel, current));
             }
-
-            //South
-            if (currentRow + 1 < rows && map[currentLevel][currentRow + 1][currentColumn] != '@' && !visited[currentLevel][currentRow + 1][currentColumn]) {
-                if (map[currentLevel][currentRow + 1][currentColumn] == '$') {
+            
+            //West
+            if (currentColumn - 1 >= 0 && map[currentLevel][currentRow][currentColumn - 1] != '@' && !visited[currentLevel][currentRow][currentColumn - 1]) {
+                if (map[currentLevel][currentRow][currentColumn - 1] == '$') {
                     buildPath(current, map); 
                     return;
                 }
-                visited[currentLevel][currentRow + 1][currentColumn] = true;
-                stack.push(new Location(currentRow + 1, currentColumn, currentLevel, current));
+                visited[currentLevel][currentRow][currentColumn - 1] = true;
+                stack.push(new Location(currentRow, currentColumn - 1, currentLevel, current));
             }
 
-            //North
-            if (currentRow - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != '@' && !visited[currentLevel][currentRow - 1][currentColumn]) {
-                if (map[currentLevel][currentRow - 1][currentColumn] == '$') {
-                    buildPath(current, map); 
-                    return;
-                }
-                visited[currentLevel][currentRow - 1][currentColumn] = true;
-                stack.push(new Location(currentRow - 1, currentColumn, currentLevel, current));
-            }
         }
 
         System.out.println("The Wolverine Store is closed.");
