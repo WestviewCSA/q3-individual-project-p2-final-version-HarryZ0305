@@ -420,7 +420,7 @@ public class p1 {
                 continue;
             }
             
-            //North
+            //North 
             if (currentRow - 1 >= 0 && map[currentLevel][currentRow - 1][currentColumn] != '@' && !visited[currentLevel][currentRow - 1][currentColumn]) {
                 if (map[currentLevel][currentRow - 1][currentColumn] == '$') {
                     buildPath(current, map); 
